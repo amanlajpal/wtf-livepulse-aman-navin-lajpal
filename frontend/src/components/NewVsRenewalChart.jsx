@@ -4,6 +4,21 @@ import { UserCheck } from 'lucide-react';
 
 const COLORS = ['#10B981', '#06B6D4']; // Emerald for New, Cyan for Renewal
 
+const CustomTooltip = ({ active, payload }) => {
+  if (active && payload && payload.length) {
+    const data = payload[0];
+    return (
+      <div className="bg-[#1A1A2E] border border-[#3D3D66] p-3 rounded-xl shadow-2xl text-xs">
+        <p className="text-slate-200 font-semibold mb-1">{data.name}</p>
+        <p className="text-white font-mono font-bold text-sm">
+          Memberships : <span className="text-cyan-400 font-extrabold">{data.value}</span>
+        </p>
+      </div>
+    );
+  }
+  return null;
+};
+
 export function NewVsRenewalChart({ data = [], loading }) {
   if (loading) {
     return (
@@ -56,12 +71,7 @@ export function NewVsRenewalChart({ data = [], loading }) {
                 <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
               ))}
             </Pie>
-            <Tooltip
-              contentStyle={{ backgroundColor: '#1A1A2E', borderColor: '#2D2D4D', borderRadius: '8px', color: '#F8FAFC', boxShadow: '0 4px 20px rgba(0,0,0,0.5)' }}
-              itemStyle={{ color: '#F8FAFC' }}
-              labelStyle={{ color: '#F8FAFC' }}
-              formatter={(val) => [val, 'Memberships']}
-            />
+            <Tooltip content={<CustomTooltip />} />
             <Legend verticalAlign="bottom" height={36} wrapperStyle={{ fontSize: '12px', color: '#E2E8F0' }} />
           </PieChart>
         </ResponsiveContainer>

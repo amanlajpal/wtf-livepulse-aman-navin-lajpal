@@ -2,6 +2,21 @@ import React from 'react';
 import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, Cell } from 'recharts';
 import { Trophy } from 'lucide-react';
 
+const CustomTooltip = ({ active, payload }) => {
+  if (active && payload && payload.length) {
+    const data = payload[0];
+    return (
+      <div className="bg-[#1A1A2E] border border-[#3D3D66] p-3 rounded-xl shadow-2xl text-xs">
+        <p className="text-slate-200 font-semibold mb-1">{data.payload.name}</p>
+        <p className="text-white font-mono font-bold text-sm">
+          30-Day Revenue : <span className="text-cyan-400 font-extrabold">₹{data.value.toLocaleString('en-IN')}</span>
+        </p>
+      </div>
+    );
+  }
+  return null;
+};
+
 export function CrossGymRevenueChart({ data = [], loading }) {
   if (loading) {
     return (
@@ -36,12 +51,7 @@ export function CrossGymRevenueChart({ data = [], loading }) {
           <BarChart data={formattedData} layout="vertical" margin={{ top: 5, right: 30, left: 100, bottom: 5 }}>
             <XAxis type="number" stroke="#64748B" fontSize={11} tickFormatter={(v) => `₹${(v/1000).toFixed(0)}k`} tickLine={false} />
             <YAxis type="category" dataKey="name" stroke="#E2E8F0" fontSize={11} tickLine={false} />
-            <Tooltip
-              contentStyle={{ backgroundColor: '#1A1A2E', borderColor: '#2D2D4D', borderRadius: '8px', color: '#F8FAFC', boxShadow: '0 4px 20px rgba(0,0,0,0.5)' }}
-              itemStyle={{ color: '#F8FAFC' }}
-              labelStyle={{ color: '#F8FAFC' }}
-              formatter={(val) => [`₹${val.toLocaleString('en-IN')}`, '30-Day Revenue']}
-            />
+            <Tooltip content={<CustomTooltip />} />
             <Bar dataKey="revenue" radius={[0, 4, 4, 0]}>
               {formattedData.map((entry, index) => (
                 <Cell
