@@ -37,7 +37,9 @@ export function CrossGymRevenueChart({ data = [], loading }) {
             <XAxis type="number" stroke="#64748B" fontSize={11} tickFormatter={(v) => `₹${(v/1000).toFixed(0)}k`} tickLine={false} />
             <YAxis type="category" dataKey="name" stroke="#E2E8F0" fontSize={11} tickLine={false} />
             <Tooltip
-              contentStyle={{ backgroundColor: '#0D0D1A', borderColor: '#2D2D4D', borderRadius: '8px', color: '#fff' }}
+              contentStyle={{ backgroundColor: '#1A1A2E', borderColor: '#2D2D4D', borderRadius: '8px', color: '#F8FAFC', boxShadow: '0 4px 20px rgba(0,0,0,0.5)' }}
+              itemStyle={{ color: '#F8FAFC' }}
+              labelStyle={{ color: '#F8FAFC' }}
               formatter={(val) => [`₹${val.toLocaleString('en-IN')}`, '30-Day Revenue']}
             />
             <Bar dataKey="revenue" radius={[0, 4, 4, 0]}>

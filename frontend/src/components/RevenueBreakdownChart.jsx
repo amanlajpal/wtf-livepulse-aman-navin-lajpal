@@ -40,7 +40,9 @@ export function RevenueBreakdownChart({ data = [], loading }) {
             <XAxis dataKey="name" stroke="#64748B" fontSize={12} tickLine={false} />
             <YAxis stroke="#64748B" fontSize={12} tickFormatter={(v) => `₹${(v/1000).toFixed(0)}k`} tickLine={false} />
             <Tooltip
-              contentStyle={{ backgroundColor: '#0D0D1A', borderColor: '#2D2D4D', borderRadius: '8px', color: '#fff' }}
+              contentStyle={{ backgroundColor: '#1A1A2E', borderColor: '#2D2D4D', borderRadius: '8px', color: '#F8FAFC', boxShadow: '0 4px 20px rgba(0,0,0,0.5)' }}
+              itemStyle={{ color: '#F8FAFC' }}
+              labelStyle={{ color: '#F8FAFC' }}
               formatter={(val) => [`₹${val.toLocaleString('en-IN')}`, 'Revenue']}
             />
             <Bar dataKey="revenue" radius={[6, 6, 0, 0]}>
