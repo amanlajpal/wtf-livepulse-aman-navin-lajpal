@@ -7,9 +7,12 @@ export function useWebSocket() {
   const handleWsEvent = useGymStore((state) => state.handleWsEvent);
 
   useEffect(() => {
-    const protocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
-    const host = window.location.host;
-    const wsUrl = `${protocol}//${host}/ws`;
+    let wsUrl = import.meta.env.VITE_WS_URL;
+    if (!wsUrl) {
+      const protocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
+      const host = window.location.host;
+      wsUrl = `${protocol}//${host}/ws`;
+    }
 
     function connect() {
       const ws = new WebSocket(wsUrl);

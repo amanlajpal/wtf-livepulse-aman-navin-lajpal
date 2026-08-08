@@ -1,0 +1,14 @@
+services:
+  - type: web
+    name: wtf-livepulse-backend
+    env: node
+    region: singapore
+    buildCommand: cd backend && npm install
+    startCommand: cd backend && npm start
+    envVars:
+      - key: PORT
+        value: 3001
+      - key: NODE_ENV
+        value: production
+      - key: DATABASE_URL
+        sync: false

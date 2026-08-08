@@ -1,3 +1,5 @@
+const fs = require('fs');
+const path = require('path');
 const pool = require('../pool');
 
 const GYMS_DATA = [
@@ -83,6 +85,12 @@ async function seed() {
   const client = await pool.connect();
 
   try {
+    // 0. Ensure schema and tables exist (Auto-migrate for Neon / Cloud Postgres)
+    const migration1 = fs.readFileSync(path.join(__dirname, '..', 'migrations', '001_initial.sql'), 'utf8');
+    const migration2 = fs.readFileSync(path.join(__dirname, '..', 'migrations', '002_indexes.sql'), 'utf8');
+    await client.query(migration1);
+    await client.query(migration2);
+
     // 1. Check if already seeded
     const gymCheck = await client.query('SELECT COUNT(*) FROM gyms');
     if (parseInt(gymCheck.rows[0].count, 10) >= 10) {

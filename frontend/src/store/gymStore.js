@@ -1,5 +1,7 @@
 import { create } from 'zustand';
 
+const API_BASE = import.meta.env.VITE_API_BASE_URL || '';
+
 export const useGymStore = create((set, get) => ({
   gyms: [],
   selectedGymId: null,
@@ -37,7 +39,7 @@ export const useGymStore = create((set, get) => ({
 
   fetchGyms: async () => {
     try {
-      const res = await fetch('/api/gyms');
+      const res = await fetch(`${API_BASE}/api/gyms`);
       if (res.ok) {
         const data = await res.json();
         set({ gyms: data, loading: { ...get().loading, gyms: false } });
@@ -54,7 +56,7 @@ export const useGymStore = create((set, get) => ({
     if (!gymId) return;
     set({ loading: { ...get().loading, snapshot: true } });
     try {
-      const res = await fetch(`/api/gyms/${gymId}/live`);
+      const res = await fetch(`${API_BASE}/api/gyms/${gymId}/live`);
       if (res.ok) {
         const data = await res.json();
         set({ liveSnapshot: data, loading: { ...get().loading, snapshot: false } });
@@ -68,7 +70,7 @@ export const useGymStore = create((set, get) => ({
     if (!gymId) return;
     set({ loading: { ...get().loading, analytics: true } });
     try {
-      const res = await fetch(`/api/gyms/${gymId}/analytics?dateRange=${dateRange}`);
+      const res = await fetch(`${API_BASE}/api/gyms/${gymId}/analytics?dateRange=${dateRange}`);
       if (res.ok) {
         const data = await res.json();
         set({ analytics: data, loading: { ...get().loading, analytics: false } });
@@ -80,7 +82,7 @@ export const useGymStore = create((set, get) => ({
 
   fetchCrossGym: async () => {
     try {
-      const res = await fetch('/api/analytics/cross-gym');
+      const res = await fetch(`${API_BASE}/api/analytics/cross-gym`);
       if (res.ok) {
         const data = await res.json();
         set({ crossGymData: data });
@@ -93,7 +95,7 @@ export const useGymStore = create((set, get) => ({
   fetchAnomalies: async () => {
     set({ loading: { ...get().loading, anomalies: true } });
     try {
-      const res = await fetch('/api/anomalies');
+      const res = await fetch(`${API_BASE}/api/anomalies`);
       if (res.ok) {
         const data = await res.json();
         set({ anomalies: data, loading: { ...get().loading, anomalies: false } });
@@ -105,7 +107,7 @@ export const useGymStore = create((set, get) => ({
 
   fetchActivityFeed: async () => {
     try {
-      const res = await fetch('/api/analytics/activity-feed');
+      const res = await fetch(`${API_BASE}/api/analytics/activity-feed`);
       if (res.ok) {
         const data = await res.json();
         set({ activityFeed: data });
@@ -117,7 +119,7 @@ export const useGymStore = create((set, get) => ({
 
   dismissAnomaly: async (id) => {
     try {
-      const res = await fetch(`/api/anomalies/${id}/dismiss`, { method: 'PATCH' });
+      const res = await fetch(`${API_BASE}/api/anomalies/${id}/dismiss`, { method: 'PATCH' });
       if (res.ok) {
         const updated = await res.json();
         set((state) => ({
@@ -193,7 +195,7 @@ export const useGymStore = create((set, get) => ({
 
   startSimulator: async (speed = 1) => {
     try {
-      const res = await fetch('/api/simulator/start', {
+      const res = await fetch(`${API_BASE}/api/simulator/start`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ speed })
@@ -209,7 +211,7 @@ export const useGymStore = create((set, get) => ({
 
   stopSimulator: async () => {
     try {
-      const res = await fetch('/api/simulator/stop', { method: 'POST' });
+      const res = await fetch(`${API_BASE}/api/simulator/stop`, { method: 'POST' });
       if (res.ok) {
         const data = await res.json();
         set({ simulatorState: { status: data.status, speed: get().simulatorState.speed } });
@@ -221,7 +223,7 @@ export const useGymStore = create((set, get) => ({
 
   resetSimulator: async () => {
     try {
-      const res = await fetch('/api/simulator/reset', { method: 'POST' });
+      const res = await fetch(`${API_BASE}/api/simulator/reset`, { method: 'POST' });
       if (res.ok) {
         const data = await res.json();
         set({ simulatorState: { status: 'paused', speed: 1 } });
