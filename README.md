@@ -63,12 +63,12 @@ All 6 core queries were benchmarked against a fully seeded database (10 gyms, 5,
 
 | # | Query Name | SQL Pattern | Target Time | Measured Time | Index / View Used | Sequential Scan? |
 | :-: | :--- | :--- | :-: | :-: | :--- | :-: |
-| **Q1** | Live Occupancy (Single Gym) | `SELECT COUNT(*) FROM checkins WHERE gym_id = $1 AND checked_out IS NULL` | `< 0.5ms` | `0.18 ms` | `idx_checkins_live_occupancy` (Partial) | **NO** |
-| **Q2** | Today's Revenue (Single Gym) | `SELECT SUM(amount) FROM payments WHERE gym_id = $1 AND paid_at >= CURRENT_DATE` | `< 0.8ms` | `0.24 ms` | `idx_payments_gym_date` (Composite) | **NO** |
-| **Q3** | Churn Risk Members | `SELECT id, name, last_checkin_at FROM members WHERE status='active' AND last_checkin_at < NOW() - INTERVAL '45 days'` | `< 1.0ms` | `0.32 ms` | `idx_members_churn_risk` (Partial) | **NO** |
-| **Q4** | Peak Hour Heatmap (7d) | `SELECT * FROM gym_hourly_stats WHERE gym_id = $1` | `< 0.3ms` | `0.14 ms` | `gym_hourly_stats` (MatView Unique Index) | **NO** |
-| **Q5** | Cross-Gym Revenue Ranking | `SELECT gym_id, SUM(amount) FROM payments WHERE paid_at >= NOW() - INTERVAL '30 days' GROUP BY gym_id ORDER BY SUM DESC` | `< 2.0ms` | `0.65 ms` | `idx_payments_date` (Covering) | **NO** |
-| **Q6** | Active Anomalies (All Gyms) | `SELECT * FROM anomalies WHERE resolved = FALSE ORDER BY detected_at DESC` | `< 0.3ms` | `0.12 ms` | `idx_anomalies_active` (Partial) | **NO** |
+| **Q1** | Live Occupancy (Single Gym) | `SELECT COUNT(*) FROM checkins WHERE gym_id = $1 AND checked_out IS NULL` | `< 0.5ms` | `0.157 ms` | `idx_checkins_live_occupancy` (Partial) | **NO** |
+| **Q2** | Today's Revenue (Single Gym) | `SELECT SUM(amount) FROM payments WHERE gym_id = $1 AND paid_at >= CURRENT_DATE` | `< 0.8ms` | `0.106 ms` | `idx_payments_gym_date` (Composite) | **NO** |
+| **Q3** | Churn Risk Members | `SELECT id, name, last_checkin_at FROM members WHERE status='active' AND last_checkin_at < NOW() - INTERVAL '45 days'` | `< 1.0ms` | `0.264 ms` | `idx_members_churn_risk` (Partial) | **NO** |
+| **Q4** | Peak Hour Heatmap (7d) | `SELECT * FROM gym_hourly_stats WHERE gym_id = $1` | `< 0.3ms` | `0.254 ms` | `gym_hourly_stats` (MatView Unique Index) | **NO** |
+| **Q5** | Cross-Gym Revenue Ranking | `SELECT gym_id, SUM(amount) FROM payments WHERE paid_at >= NOW() - INTERVAL '30 days' GROUP BY gym_id ORDER BY SUM DESC` | `< 2.0ms` | `1.780 ms` | `idx_payments_date` (Covering) | **NO** |
+| **Q6** | Active Anomalies (All Gyms) | `SELECT * FROM anomalies WHERE resolved = FALSE ORDER BY detected_at DESC` | `< 0.3ms` | `0.332 ms` | `idx_anomalies_active` (Partial) | **NO** |
 
 *Detailed EXPLAIN ANALYZE execution logs are available in `/benchmarks/screenshots/`.*
 

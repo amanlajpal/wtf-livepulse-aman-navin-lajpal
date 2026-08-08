@@ -1,0 +1,25 @@
+=== BENCHMARK QUERY Q5: Cross-Gym Revenue Comparison ===
+Target Time: < 2.0ms
+Index Used: idx_payments_date (covering)
+Measured Execution Time: 1.780 ms
+
+=== EXPLAIN ANALYZE OUTPUT ===
+Sort  (cost=177.02..177.04 rows=10 width=48) (actual time=1.649..1.650 rows=10 loops=1)
+  Sort Key: (sum(amount)) DESC
+  Sort Method: quicksort  Memory: 25kB
+  Buffers: shared hit=118
+  ->  HashAggregate  (cost=176.72..176.85 rows=10 width=48) (actual time=1.549..1.551 rows=10 loops=1)
+        Group Key: gym_id
+        Batches: 1  Memory Usage: 24kB
+        Buffers: shared hit=115
+        ->  Bitmap Heap Scan on payments  (cost=35.67..169.38 rows=1469 width=21) (actual time=0.149..1.245 rows=1731 loops=1)
+              Recheck Cond: (paid_at >= (now() - '30 days'::interval))
+              Heap Blocks: exact=108
+              Buffers: shared hit=115
+              ->  Bitmap Index Scan on idx_payments_date  (cost=0.00..35.30 rows=1469 width=0) (actual time=0.130..0.130 rows=1731 loops=1)
+                    Index Cond: (paid_at >= (now() - '30 days'::interval))
+                    Buffers: shared hit=7
+Planning:
+  Buffers: shared hit=26
+Planning Time: 0.313 ms
+Execution Time: 1.780 ms
