@@ -13,7 +13,7 @@ export function useWebSocket() {
         const protocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
         wsUrl = `${protocol}//${window.location.host}/ws`;
       } else {
-        wsUrl = 'wss://wtf-livepulse-backend.onrender.com/ws';
+        wsUrl = 'wss://wtf-livepulse-aman-navin-lajpal.onrender.com/ws';
       }
     }
 
